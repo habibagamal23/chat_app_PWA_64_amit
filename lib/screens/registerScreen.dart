@@ -1,13 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../logic/auth_cubit.dart';
+import 'AddImageScreen.dart';
 import 'HomeScreen.dart';
 import 'Loginscreen.dart';
 
-
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +26,7 @@ class RegisterScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
+
           TextField(
             controller: emailController,
             decoration: InputDecoration(
@@ -41,7 +52,7 @@ class RegisterScreen extends StatelessWidget {
 
               if (state is AuthSuccess) {
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Homescreen()));
+                    MaterialPageRoute(builder: (context) => Addimagescreen()));
               }
             },
             builder: (context, state) {
@@ -51,7 +62,7 @@ class RegisterScreen extends StatelessWidget {
               return ElevatedButton(
                   onPressed: () {
                     context.read<AuthCubit>().register(
-                        emailController.text, passwordController.text);
+                        emailController.text, passwordController.text, null);
                   },
                   child: Text("Register"));
             },

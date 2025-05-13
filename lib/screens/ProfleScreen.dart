@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pwachat/logic/profile_cubit.dart';
+import 'package:pwachat/screens/Loginscreen.dart';
+import 'package:pwachat/supbase/supbaseAuth.dart';
 
 class ProfleScreen extends StatefulWidget {
   const ProfleScreen({super.key});
@@ -22,6 +24,15 @@ class _ProfleScreenState extends State<ProfleScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("my profile"),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await SupbaseAuth().logout();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => Loginscreen()));
+              },
+              icon: Icon(Icons.logout))
+        ],
       ),
       body: BlocBuilder<ProfileCubit, ProfileState>(builder: (context, state) {
         if (state is ProfileLoading) {
@@ -38,6 +49,9 @@ class _ProfleScreenState extends State<ProfleScreen> {
         if (state is ProfileSuccess) {
           return Column(
             children: [
+              CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage("${state.profile.avatar_url}")),
               Text("username :${state.profile.username}"),
               Text("email :${state.profile.email}"),
               Text("phone :${state.profile.phone}"),

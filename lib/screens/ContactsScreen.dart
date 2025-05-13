@@ -1,0 +1,65 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../logic/contacts_cubit.dart';
+
+class Contactsscreen extends StatefulWidget {
+  const Contactsscreen({super.key});
+
+  @override
+  State<Contactsscreen> createState() => _ContactsscreenState();
+}
+
+class _ContactsscreenState extends State<Contactsscreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<ContactsCubit>().showAllContcts();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Contacts"),
+      ),
+      body: BlocBuilder<ContactsCubit, ContactsState>(
+        builder: (context, state) {
+          if (state is ContactsLoading) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (state is ContactsError) {
+            return Center(child: Text(state.error));
+          }
+          if (state is ContactsSuccess) {
+            return ListView.builder(
+                itemCount: state.profiles.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    elevation: 2,
+                    color: Colors.white10,
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: state.profiles[index].avatar_url !=
+                                null
+                            ? NetworkImage(state.profiles[index].avatar_url!)
+                            : null,
+                        child: state.profiles[index].avatar_url == null
+                            ? Icon(Icons.person)
+                            : null,
+                      ),
+                      title: Text("${state.profiles[index].email}"),
+                      subtitle: Text("${state.profiles[index].phone}"),
+                      trailing:
+                          TextButton(onPressed: () {}, child: Text("Add")),
+                    ),
+                  );
+                });
+          }
+          return Text("no data");
+        },
+      ),
+    );
+  }
+}

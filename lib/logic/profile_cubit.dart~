@@ -4,6 +4,7 @@ import 'package:pwachat/supbase/SupbaseAuth.dart';
 import 'package:pwachat/supbase/supbasedb.dart';
 
 import '../model/profilemodel.dart';
+import '../supbase/supbaseStorage.dart';
 
 part 'profile_state.dart';
 

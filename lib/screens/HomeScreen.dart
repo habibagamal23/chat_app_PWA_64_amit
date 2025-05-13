@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'ContactsScreen.dart';
 import 'ProfleScreen.dart';
 
 class Homescreen extends StatelessWidget {
@@ -21,6 +22,16 @@ class Homescreen extends StatelessWidget {
         ],
       ),
       body: Text("home"),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+        Navigator.push(context,
+            MaterialPageRoute(
+                builder:
+                    (context) => Contactsscreen()));
+      },
+        backgroundColor: Colors.red,
+        child: Icon(Icons.add),
+      ),
     );
   }
 }

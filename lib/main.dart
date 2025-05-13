@@ -5,6 +5,7 @@ import 'package:pwachat/screens/registerScreen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'logic/auth_cubit.dart';
+import 'logic/contacts_cubit.dart';
 import 'logic/profile_cubit.dart';
 
 void main() async {
@@ -19,19 +20,20 @@ void main() async {
     BlocProvider(
       create: (context) => AuthCubit(),
     ),
-    BlocProvider(create: (context) => ProfileCubit())
+    BlocProvider(create: (context) => ProfileCubit()),
+    BlocProvider(create: (context) => ContactsCubit())
   ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  MyApp({super.key});
+  final subase = Supabase.instance.client;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: RegisterScreen(),
+      home: subase.auth.currentUser == null ? RegisterScreen() : Homescreen(),
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:pwachat/supbase/supbasedb.dart';
 
@@ -9,13 +11,14 @@ import 'SupbaseAuth.dart';
 class SupbaseAuth {
   final supabase = Supabase.instance.client;
 
-  String ? get CurrentUserId{
+  String? get CurrentUserId {
     return supabase.auth.currentUser!.id;
   }
+  Future  logout() async {
+    await supabase.auth.signOut();
+  }
 
-
-
-  Future registerUser(String email, String password) async {
+  Future registerUser(String email, String password, File? urlimage) async {
     try {
       final AuthResponse response = await supabase.auth.signUp(
         email: email,
@@ -23,15 +26,15 @@ class SupbaseAuth {
       );
       print(response.user);
       print("SignUp Successfully");
-      if(response.user!=null){
-
-        Profile profile=Profile(id: response.user!.id,
+      if (response.user != null) {
+        Profile profile = Profile(
+            id: response.user!.id,
             username: "no username",
             email: email,
-            phone: "02737363");
+            phone: "02737363",
+            avatar_url: null);
 
-        await   SupbaseDb().insertProfile(profile);
-
+        await SupbaseDb().insertProfile(profile);
       }
     } catch (e) {
       throw Exception(e.toString());
@@ -50,4 +53,6 @@ class SupbaseAuth {
       throw Exception(e.toString());
     }
   }
+
+
 }
